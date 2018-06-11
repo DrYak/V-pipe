@@ -122,7 +122,7 @@ with open(configBench.input['samples_file'], newline='') as csvfile:
 
         if len(row) == 2:
             # All data sets are assumed to have default specifications
-            sample_dict[sample_tuple] = {"read_len":250, "haplotype_seqs":None, "num_haplotypes":5, "coverage":500, "fragment_size":'600,100', "freq_dstr":'geom', "geom_ratio":0.75, "mut_rate":0.1, "del_rate":0.0, "ins_rate":0.0, "no_frameshifts":True, "del_len":None}
+            sample_dict[sample_tuple] = {"read_len":250, "haplotype_seqs":None, "num_haplotypes":5, "coverage":500, "fragment_size":'600,100', "freq_dstr":'geom', "geom_ratio":0.75, "mut_rate":0.1, "del_rate":0.0, "ins_rate":0.0, "no_frameshifts":True, "del_len":''}
 
         else:
             # All other features (except seed) must be specified
@@ -214,7 +214,8 @@ def get_no_FR(wildcards):
 def get_del_len(wildcards):
     sample_tuple = sample_record(sample_name=wildcards.sample_name, date=wildcards.date)
     del_len = sample_dict[sample_tuple]['del_len']
-    if len(del_len) == 0 or del_len.upper() in ["NA", "N/A"]:
+    del_len = del_len.strip()
+    if not del_len or del_len.upper() in ["NA", "N/A"]:
         val = ''
     else:
         val = '-dl {}'.format(del_len)
